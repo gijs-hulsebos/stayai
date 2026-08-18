@@ -48,6 +48,15 @@ const VERIFIED_HOTEL_CATALOG: CatalogDestination[] = [
       { hotelKey: "g187147-d197455", name: "Hôtel Lutetia", url: "https://www.tripadvisor.com/Hotel_Review-g187147-d197455-Reviews-Hotel_Lutetia-Paris_Ile_de_France.html", imageUrl: "/hotels/hotel-lutetia-paris.jpg", placeName: "Saint-Germain-des-Prés, Paris", accommodationType: "Luxury hotel", rating: null, reviewCount: null, reason: "A Left Bank landmark combining historic Paris with a contemporary interior.", highlights: ["Left Bank", "Spa", "Historic"] },
     ],
   },
+  {
+    key: "g187791", name: "Rome", aliases: ["rome", "roma", "rome italy", "roma italy", "italy", "italia"],
+    hotels: [
+      { hotelKey: "g187791-d191331", name: "Hotel Eden", url: "https://www.tripadvisor.com/Hotel_Review-g187791-d191331-Reviews-Hotel_Eden-Rome_Lazio.html", imageUrl: null, placeName: "Via Veneto, Rome", accommodationType: "Luxury hotel", rating: null, reviewCount: null, reason: "A landmark Roman stay near the Spanish Steps and Villa Borghese.", highlights: ["Via Veneto", "City views", "Fine dining"] },
+      { hotelKey: "g187791-d191332", name: "Hotel Hassler", url: "https://www.tripadvisor.com/Hotel_Review-g187791-d191332-Reviews-Hotel_Hassler-Rome_Lazio.html", imageUrl: null, placeName: "Spanish Steps, Rome", accommodationType: "Luxury hotel", rating: null, reviewCount: null, reason: "A historic five-star address directly above the Spanish Steps.", highlights: ["Spanish Steps", "Rooftop", "Fine dining"] },
+      { hotelKey: "g187791-d232851", name: "Hotel de Russie", url: "https://www.tripadvisor.com/Hotel_Review-g187791-d232851-Reviews-Hotel_de_Russie-Rome_Lazio.html", imageUrl: null, placeName: "Piazza del Popolo, Rome", accommodationType: "Luxury hotel", rating: null, reviewCount: null, reason: "A refined city retreat known for its private Mediterranean garden.", highlights: ["Secret garden", "Spa", "Central Rome"] },
+      { hotelKey: "g187791-d3929140", name: "J.K. Place Roma", url: "https://www.tripadvisor.com/Hotel_Review-g187791-d3929140-Reviews-J_K_Place_Roma-Rome_Lazio.html", imageUrl: null, placeName: "Centro Storico, Rome", accommodationType: "Boutique hotel", rating: null, reviewCount: null, reason: "An intimate design-led hotel in Rome's historic centre.", highlights: ["Historic centre", "Boutique", "Design"] },
+    ],
+  },
 ];
 
 function normalizedDestination(value: string) {
