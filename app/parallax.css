@@ -1,0 +1,80 @@
+.parallax { position: relative; color: #f7f6ef; background: #061a15; }
+.parallax__header { height: 460svh; min-height: 2800px; position: relative; }
+.parallax__visuals { position: sticky; top: 0; width: 100%; height: 100svh; min-height: 650px; overflow: hidden; }
+.parallax__layers { position: absolute; inset: 0; isolation: isolate; overflow: hidden; }
+.parallax__layer { position: absolute; inset: 0; transform-origin: center center; will-change: transform; }
+.parallax__video { position: absolute; z-index: 0; inset: 0; overflow: hidden; contain: paint; background: #061a15 url("/walkthrough-spatial-v3/4k/01-exterior.jpg") center/cover no-repeat; }
+.parallax__film { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; image-rendering: auto; }
+.parallax__shade { position: absolute; z-index: 1; inset: 0; opacity: .46; background: linear-gradient(90deg,rgba(3,17,13,.68),rgba(3,17,13,.05) 56%,rgba(3,17,13,.28)),linear-gradient(0deg,rgba(3,17,13,.75),transparent 48%,rgba(3,17,13,.16)); pointer-events: none; }
+.parallax__grain { position: absolute; z-index: 4; inset: 0; opacity: .025; mix-blend-mode: soft-light; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitchTiles'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
+.parallax__title-layer { z-index: 2; inset: 0; top: 17vh; left: clamp(22px,5vw,84px); width: min(90vw,1460px); height: max-content; will-change: transform,opacity; }
+.parallax__eyebrow { margin: 0 0 clamp(24px,4vh,48px); font-size: 10px; font-weight: 650; letter-spacing: .19em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.parallax__title { margin: 0; font: 350 clamp(78px,12.2vw,195px)/.73 "Newsreader Variable",Georgia,serif; letter-spacing: -.075em; }
+.parallax__title span,
+.parallax__title em { display: block; }
+.parallax__title em { margin-left: 14vw; color: #d9e8db; font-weight: 300; }
+.parallax__support { max-width: 450px; margin: 34px 0 0; color: rgba(255,255,255,.76); font-size: clamp(14px,1.2vw,18px); line-height: 1.55; }
+.parallax__actions { margin-top: 27px; display: flex; gap: 10px; }
+.parallax__actions a { min-height: 50px; padding: 0 21px; border: 1px solid rgba(255,255,255,.36); border-radius: 999px; display: inline-flex; align-items: center; gap: 16px; color: #fff; background: rgba(4,24,18,.18); backdrop-filter: blur(12px); text-decoration: none; font-size: 11px; font-weight: 650; transition: gap .35s,background .3s,color .3s; }
+.parallax__actions a:first-child { color: #08211b; background: #f7f6ef; }
+.parallax__actions a:hover { gap: 24px; }
+.parallax__actions svg { width: 15px; }
+.parallax__booking { position: absolute; z-index: 3; right: clamp(24px,6vw,105px); bottom: 19vh; width: min(410px,calc(100vw - 48px)); padding-top: 22px; border-top: 1px solid rgba(255,255,255,.48); opacity: .88; transform: translateY(0); will-change: transform,opacity; }
+.parallax__booking > div { display: flex; justify-content: space-between; color: rgba(255,255,255,.55); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+.parallax__booking > div strong { display: flex; align-items: center; gap: 8px; color: #d9ff9f; font-size: inherit; }
+.parallax__booking > div i { width: 7px; height: 7px; border-radius: 50%; background: #c9ff76; box-shadow: 0 0 0 5px rgba(201,255,118,.1); }
+.parallax__booking h2 { margin: 18px 0 8px; font: 370 clamp(32px,3.5vw,54px)/1 "Newsreader Variable",serif; letter-spacing: -.035em; }
+.parallax__booking p { margin: 0; display: flex; align-items: center; gap: 7px; color: rgba(255,255,255,.67); font-size: 10px; }
+.parallax__booking p svg { width: 13px; }
+.parallax__scene-copy { position: absolute; z-index: 3; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 12vh clamp(28px,6vw,105px) 9vh; overflow: hidden; background: linear-gradient(90deg,rgba(2,15,11,.72) 0%,rgba(2,15,11,.43) 43%,rgba(2,15,11,.08) 78%,transparent),linear-gradient(0deg,rgba(2,15,11,.52),transparent 44%); will-change: transform,opacity; pointer-events: none; }
+.parallax__rule { position: relative; z-index: 1; width: min(85vw,1210px); height: 1px; margin-bottom: clamp(24px,4vh,46px); display: block; background: linear-gradient(90deg,#c9ff76,rgba(255,255,255,.32) 28%,transparent 100%); transform-origin: left; }
+.parallax__scene-copy h2,.parallax__scene-copy p,.parallax__scene-kicker { position: relative; z-index: 1; }
+.parallax__scene-kicker { display: flex; align-items: center; gap: 14px; margin-bottom: clamp(20px,3vh,34px); color: rgba(255,255,255,.67); font-size: 10px; font-weight: 650; text-transform: uppercase; }
+.parallax__scene-kicker > i { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 32px; border: 1px solid rgba(217,255,159,.52); border-radius: 50%; color: #d9ff9f; font-style: normal; letter-spacing: .04em; }
+.parallax__scene-copy h2 { margin: 0; max-width: min(88vw,1300px); font: 330 clamp(76px,10.2vw,164px)/.83 "Newsreader Variable",Georgia,serif; letter-spacing: -.065em; text-wrap: balance; text-shadow: 0 3px 26px rgba(0,0,0,.2); perspective: 900px; }
+.parallax__word { display: inline-block; margin-right: .19em; transform-origin: 50% 100%; will-change: transform,opacity,filter; }
+.parallax__word:last-child { margin-right: 0; }
+.parallax__ghost-step { position: absolute; z-index: 0; right: -.035em; bottom: -.22em; color: #fff; font: 270 min(31vw,470px)/1 "Newsreader Variable",Georgia,serif; letter-spacing: -.08em; pointer-events: none; will-change: transform,opacity; }
+.parallax__scene-copy p { margin: clamp(25px,4vh,44px) 0 0; max-width: 600px; padding-left: 18px; border-left: 1px solid rgba(217,255,159,.58); color: rgba(255,255,255,.86); font-size: clamp(16px,1.35vw,21px); line-height: 1.5; text-shadow: 0 2px 18px rgba(0,0,0,.26); }
+.parallax__fade { position: absolute; z-index: 9; left: 0; right: 0; bottom: -1px; height: 18vh; background: linear-gradient(transparent,#f2efe5); pointer-events: none; }
+.parallax__scroll,
+.parallax__counter { position: absolute; z-index: 10; bottom: 29px; color: rgba(255,255,255,.62); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+.parallax__scroll { left: clamp(22px,5vw,84px); display: flex; align-items: center; gap: 10px; }
+.parallax__scroll i { width: 37px; height: 1px; background: currentColor; }
+.parallax__scroll svg { width: 13px; }
+.parallax__counter { right: clamp(22px,5vw,84px); }
+.parallax__meter { position: absolute; z-index: 10; right: 19px; top: 22vh; bottom: 22vh; width: 1px; background: rgba(255,255,255,.16); }
+.parallax__meter i { display: block; width: 1px; height: 100%; background: #c9ff76; transform-origin: top; will-change: transform; }
+.parallax__meter b { position: absolute; left: 50%; width: 5px; height: 5px; border: 1px solid rgba(255,255,255,.52); border-radius: 50%; background: #0a211a; transform: translate(-50%,-50%); box-shadow: 0 0 0 3px rgba(6,26,21,.24); }
+
+@media (max-width: 760px) {
+  .parallax__header { height: 360svh; min-height: 2100px; }
+  .parallax__visuals { min-height: 580px; }
+  .parallax__film { object-position: 58% center; }
+  .parallax__interior img { object-position: center; }
+  .parallax__title-layer { top: 19vh; left: 19px; width: calc(100vw - 38px); }
+  .parallax__title { font-size: clamp(68px,21.5vw,102px); }
+  .parallax__title em { margin-left: 0; }
+  .parallax__support { max-width: 310px; margin-top: 24px; font-size: 14px; }
+  .parallax__actions { flex-wrap: wrap; }
+  .parallax__actions a { min-height: 45px; padding: 0 16px; }
+  .parallax__booking { left: 19px; right: 19px; bottom: 14vh; width: auto; }
+  .parallax__booking h2 { font-size: 31px; }
+  .parallax__scene-copy { justify-content: flex-end; padding: 110px 20px 13vh; background: linear-gradient(0deg,rgba(2,15,11,.78) 0%,rgba(2,15,11,.35) 55%,rgba(2,15,11,.02) 82%); }
+  .parallax__rule { width: 100%; margin-bottom: 22px; }
+  .parallax__ghost-step { right: -.02em; bottom: -.12em; font-size: min(52vw,220px); }
+  .parallax__scene-kicker { margin-bottom: 18px; font-size: 8px; }
+  .parallax__scene-kicker > i { width: 28px; height: 28px; flex-basis: 28px; }
+  .parallax__scene-copy h2 { max-width: 100%; font-size: clamp(50px,14.5vw,72px); line-height: .88; }
+  .parallax__scene-copy p { margin-top: 22px; max-width: 92%; font-size: 14px; }
+  .parallax__scroll { left: 19px; }
+  .parallax__counter { right: 19px; }
+  .parallax__meter { right: 8px; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax__layer { inset: 0; transform: none !important; }
+  .parallax__booking { opacity: 1; transform: none; }
+  .parallax__title-layer { transform: none !important; }
+}

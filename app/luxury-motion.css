@@ -1,0 +1,216 @@
+:root {
+  --lux-silk: cubic-bezier(.22, 1, .36, 1);
+  --lux-precise: cubic-bezier(.2, .75, .25, 1);
+}
+
+/* Editorial entrance: quiet enough to disappear once it has done its job. */
+.luxury-motion-on [data-lux-reveal="true"] {
+  opacity: 1;
+  translate: none;
+}
+
+.luxury-motion-on [data-lux-reveal="true"].lux-visible {
+  animation: lux-editorial-arrive .72s var(--lux-silk) both;
+  animation-delay: calc(var(--lux-order, 0) * 55ms);
+}
+
+@keyframes lux-editorial-arrive {
+  from { opacity: 0; transform: translateY(13px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The film's typography is driven directly by scroll progress. */
+.luxury-motion-on .parallax [data-lux-reveal="true"] {
+  opacity: 1;
+  translate: none;
+  transition: none;
+}
+
+/* Controls feel weighted and precise; they never chase the pointer. */
+.luxury-motion-on [data-lux-interactive="true"] {
+  transition:
+    color .26s ease,
+    background-color .32s ease,
+    border-color .32s ease,
+    box-shadow .42s var(--lux-silk),
+    opacity .26s ease,
+    transform .42s var(--lux-silk);
+}
+
+.luxury-motion-on main button[data-lux-interactive="true"]:not(:disabled):hover,
+.luxury-motion-on main a[data-lux-interactive="true"]:hover {
+  transform: translateY(-1px);
+}
+
+.luxury-motion-on main button[data-lux-interactive="true"]:not(:disabled):active,
+.luxury-motion-on main a[data-lux-interactive="true"]:active {
+  transform: translateY(0) scale(.992);
+  transition-duration: .1s;
+}
+
+.luxury-motion-on [data-lux-interactive="true"] svg {
+  transition: transform .42s var(--lux-silk), opacity .26s ease;
+}
+
+.luxury-motion-on main [data-lux-interactive="true"]:hover svg:last-child {
+  transform: translateX(2px);
+}
+
+.luxury-motion-on [data-lux-interactive="true"]:focus-visible {
+  outline: 1px solid #557d70;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 5px rgba(91, 130, 116, .08);
+}
+
+/* Surfaces resolve as a unit. Hover depth stays nearly imperceptible. */
+.luxury-motion-on [data-lux-surface="true"] {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    translate .82s var(--lux-silk),
+    box-shadow .55s var(--lux-silk),
+    border-color .38s ease;
+}
+
+.luxury-motion-on [data-lux-surface="true"].lux-visible {
+  animation: lux-surface-arrive .76s var(--lux-silk) both;
+}
+
+@keyframes lux-surface-arrive {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.luxury-motion-on [data-lux-surface="true"].lux-visible:hover {
+  translate: 0 -2px;
+}
+
+/* Photography opens softly and then remains calm. */
+.luxury-motion-on [data-lux-image="true"] {
+  opacity: 1;
+  clip-path: inset(0);
+}
+
+.luxury-motion-on [data-lux-image="true"].lux-visible {
+  animation: lux-image-arrive .9s var(--lux-silk) both;
+}
+
+@keyframes lux-image-arrive {
+  from { opacity: 0; clip-path: inset(0 0 4% 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+
+.luxury-motion-on [data-lux-image="true"] img {
+  transform: scale(1.012);
+  transition: transform 1.05s var(--lux-silk), filter .5s ease !important;
+}
+
+.luxury-motion-on [data-lux-image="true"]:hover img {
+  transform: scale(1.025);
+}
+
+/* Navigation and menus. */
+.luxury-motion-on .site-header {
+  transition: background-color .38s ease, box-shadow .42s var(--lux-silk), border-color .38s ease;
+}
+
+.luxury-motion-on .brand-button .brand-symbol {
+  transition: transform .48s var(--lux-silk), opacity .3s ease;
+}
+
+.luxury-motion-on .brand-button:hover .brand-symbol {
+  transform: translateY(-1px);
+}
+
+.luxury-motion-on .main-nav a::after {
+  height: 1px;
+  transform-origin: center;
+  transition: left .48s var(--lux-silk), right .48s var(--lux-silk), opacity .25s ease;
+}
+
+.luxury-motion-on .profile-menu,
+.luxury-motion-on .mobile-nav {
+  transform-origin: top right;
+  animation: lux-menu-open .42s var(--lux-silk) both;
+}
+
+@keyframes lux-menu-open {
+  from { opacity: 0; transform: translateY(-5px) scale(.99); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Functional details. */
+.luxury-motion-on .hotel-highlights span,
+.luxury-motion-on .chip-row button,
+.luxury-motion-on .choice-grid button,
+.luxury-motion-on .explore-filters button {
+  transition: background-color .3s ease, border-color .3s ease, color .3s ease, transform .38s var(--lux-silk);
+}
+
+.luxury-motion-on .hotel-highlights span:hover,
+.luxury-motion-on .chip-row button:hover,
+.luxury-motion-on .choice-grid button:hover,
+.luxury-motion-on .explore-filters button:hover {
+  transform: translateY(-1px);
+}
+
+.luxury-motion-on input {
+  transition: border-color .3s ease, box-shadow .4s var(--lux-silk), background-color .3s ease;
+}
+
+.luxury-motion-on input:focus {
+  box-shadow: 0 0 0 4px rgba(49, 100, 82, .07);
+}
+
+.luxury-motion-on .assistant-response-note.has-results {
+  animation: lux-content-arrive .68s var(--lux-silk) both;
+}
+
+.luxury-motion-on .hotel-results .hotel-card {
+  animation: lux-content-arrive .72s var(--lux-silk) both;
+  animation-delay: calc(var(--lux-card-order, 0) * 65ms);
+}
+
+.luxury-motion-on .hotel-results .hotel-card:nth-child(2) { --lux-card-order: 1; }
+.luxury-motion-on .hotel-results .hotel-card:nth-child(3) { --lux-card-order: 2; }
+.luxury-motion-on .hotel-results .hotel-card:nth-child(4) { --lux-card-order: 3; }
+
+@keyframes lux-content-arrive {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.lux-route-arriving .route-stage main {
+  animation: lux-route-settle .62s var(--lux-silk) both;
+}
+
+@keyframes lux-route-settle {
+  from { opacity: .82; transform: translateY(7px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 680px) {
+  @keyframes lux-editorial-arrive {
+    from { opacity: 0; transform: translateY(9px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes lux-surface-arrive {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-lux-reveal="true"],
+  [data-lux-surface="true"],
+  [data-lux-image="true"],
+  [data-lux-image="true"] img {
+    opacity: 1 !important;
+    translate: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

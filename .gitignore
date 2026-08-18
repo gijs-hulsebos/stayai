@@ -1,0 +1,46 @@
+# dependencies
+/node_modules
+
+# Next.js build output
+/.next
+/out
+/video-demo/node_modules
+/video-demo/out
+
+# local files
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# Local review and downloaded dependency workspaces
+/.review/
+/.codex/
+/vendor/
+
+# Legacy image-sequence and walkthrough exports. The live site keeps only the
+# three referenced stills and the current bidirectional scroll master below.
+/public/art-direction-reference/
+/public/walkthrough-frames/
+/public/walkthrough-frames-1080/
+/public/walkthrough-stills-v2/
+/public/higgsfield-*.png
+/public/stayai-higgsfield-*.mp4
+/public/lakeview-lodge.png
+/public/lodge-suite.png
+/public/stayai-arrival-establishing-v1.png
+/public/stayai-arrival-terrace-v1.png
+/public/stayai-luxury-*.png
+
+/public/walkthrough-spatial-v3/*
+!/public/walkthrough-spatial-v3/4k/
+/public/walkthrough-spatial-v3/4k/*
+!/public/walkthrough-spatial-v3/4k/01-exterior.jpg
+!/public/walkthrough-spatial-v3/4k/02-jacuzzi.jpg
+!/public/walkthrough-spatial-v3/4k/04-dining-from-fireplace-source-v3.jpg
+!/public/walkthrough-spatial-v3/video/
+/public/walkthrough-spatial-v3/video/*
+!/public/walkthrough-spatial-v3/video/stayai-scroll-master-bidirectional-qp23-1080p60.mp4
