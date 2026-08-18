@@ -6,9 +6,12 @@ const RAPIDAPI_HOST = process.env.XOTELO_RAPIDAPI_HOST || "xotelo-hotel-prices.p
 const BASE_URL = RAPIDAPI_KEY ? `https://${RAPIDAPI_HOST}/api` : DIRECT_BASE_URL;
 const TIMEOUT_MS = 14_000;
 const METADATA_TTL_MS = 5 * 60_000;
+const DISCOVERY_TIMEOUT_MS = 10_000;
+const DISCOVERY_RESULT_LIMIT = 8;
 
 const destinationCache = new Map<string, { expiresAt: number; value: { key: string; name: string } }>();
 const hotelCache = new Map<string, { expiresAt: number; value: HotelResult[] }>();
+const discoveredHotels = new Map<string, { expiresAt: number; value: HotelResult[] }>();
 
 type CatalogDestination = { key: string; name: string; aliases: string[]; hotels: Array<Omit<HotelResult, "locationKey" | "rate">> };
 
@@ -49,7 +52,7 @@ const VERIFIED_HOTEL_CATALOG: CatalogDestination[] = [
     ],
   },
   {
-    key: "g187791", name: "Rome", aliases: ["rome", "roma", "rome italy", "roma italy", "italy", "italia"],
+    key: "g187791", name: "Rome", aliases: ["rome", "roma", "rome italy", "roma italy"],
     hotels: [
       { hotelKey: "g187791-d191331", name: "Hotel Eden", url: "https://www.tripadvisor.com/Hotel_Review-g187791-d191331-Reviews-Hotel_Eden-Rome_Lazio.html", imageUrl: null, placeName: "Via Veneto, Rome", accommodationType: "Luxury hotel", rating: null, reviewCount: null, reason: "A landmark Roman stay near the Spanish Steps and Villa Borghese.", highlights: ["Via Veneto", "City views", "Fine dining"] },
       { hotelKey: "g187791-d191332", name: "Hotel Hassler", url: "https://www.tripadvisor.com/Hotel_Review-g187791-d191332-Reviews-Hotel_Hassler-Rome_Lazio.html", imageUrl: null, placeName: "Spanish Steps, Rome", accommodationType: "Luxury hotel", rating: null, reviewCount: null, reason: "A historic five-star address directly above the Spanish Steps.", highlights: ["Spanish Steps", "Rooftop", "Fine dining"] },
@@ -61,6 +64,89 @@ const VERIFIED_HOTEL_CATALOG: CatalogDestination[] = [
 
 function normalizedDestination(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function discoveryKey(query: string) {
+  let hash = 5381;
+  for (const character of normalizedDestination(query)) hash = ((hash << 5) + hash) ^ character.charCodeAt(0);
+  return `discovery-${(hash >>> 0).toString(36)}`;
+}
+
+function decodeHtml(value: string) {
+  return value
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([\da-f]+);/gi, (_, code: string) => String.fromCodePoint(Number.parseInt(code, 16)))
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&nbsp;/g, " ");
+}
+
+function hotelNameFromSearch(title: string | undefined, url: string) {
+  const cleanedTitle = decodeHtml(title || "")
+    .replace(/\s+[-|–]\s+(?:prices|reviews|updated|tripadvisor).*$/i, "")
+    .trim();
+  if (cleanedTitle) {
+    return cleanedTitle === cleanedTitle.toUpperCase()
+      ? cleanedTitle.toLocaleLowerCase().replace(/(^|[\s&'-])\p{L}/gu, (letter) => letter.toLocaleUpperCase())
+      : cleanedTitle;
+  }
+  const slug = /-Reviews-([^-]+(?:_[^-]+)*)-/.exec(url)?.[1] || "Hotel";
+  return slug.replace(/_/g, " ").trim();
+}
+
+function tripAdvisorHotelsFromHtml(html: string, query: string) {
+  const decoded = decodeHtml(html.replace(/\\u002F/g, "/").replace(/\\\//g, "/"));
+  const linkPattern = /href="(https:\/\/(?:www\.)?tripadvisor\.[^"\s<>]+\/Hotel_Review-g(\d+)-d(\d+)-Reviews-[^"\s<>]+?\.html)"[\s\S]{0,3200}?(?:class="title search-snippet-title[^"]*" title="([^"]+)")?/gi;
+  const hotels: HotelResult[] = [];
+  const seen = new Set<string>();
+  for (const match of decoded.matchAll(linkPattern)) {
+    const hotelKey = `g${match[2]}-d${match[3]}`;
+    if (seen.has(hotelKey)) continue;
+    seen.add(hotelKey);
+    const rawUrl = match[1].split("?")[0];
+    const url = rawUrl.replace(/^https:\/\/(?:www\.)?tripadvisor\.[^/]+/i, "https://www.tripadvisor.com");
+    const nearby = decoded.slice(match.index || 0, (match.index || 0) + 10_000);
+    const thumbnail = /class="thumbnail[^"]*"[^>]*>[\s\S]{0,500}?<img src="([^"]+)"/i.exec(nearby)?.[1];
+    hotels.push({
+      hotelKey,
+      locationKey: `g${match[2]}`,
+      name: hotelNameFromSearch(match[4], url),
+      url,
+      imageUrl: thumbnail?.startsWith("https://imgs.search.brave.com/") ? thumbnail : null,
+      placeName: query,
+      accommodationType: "Hotel",
+      rating: null,
+      reviewCount: null,
+      reason: `A real hotel result for ${query}; live rates are checked through Xotelo when dates are selected.`,
+      highlights: [],
+      rate: null,
+    });
+    if (hotels.length >= DISCOVERY_RESULT_LIMIT) break;
+  }
+  return hotels;
+}
+
+async function discoverHotelsForDestination(query: string) {
+  try {
+    const searchableDestination = query.replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
+    const url = new URL("https://search.brave.com/search");
+    url.searchParams.set("q", `Tripadvisor ${searchableDestination} hotels`);
+    url.searchParams.set("source", "web");
+    const response = await fetch(url, {
+      headers: {
+        Accept: "text/html",
+        "Accept-Language": "en-US,en;q=0.9",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+      },
+      signal: AbortSignal.timeout(DISCOVERY_TIMEOUT_MS),
+      cache: "no-store",
+    });
+    if (!response.ok) return [];
+    return tripAdvisorHotelsFromHtml(await response.text(), query).slice(0, DISCOVERY_RESULT_LIMIT);
+  } catch {
+    return [];
+  }
 }
 
 function catalogByQuery(query: string) {
@@ -145,10 +231,18 @@ export async function findDestination(query: string) {
     // Xotelo's upstream location search currently returns empty results for some valid cities.
   }
   if (!destination) {
+    const discovered = await discoverHotelsForDestination(query);
+    if (discovered.length) {
+      const key = discoveryKey(query);
+      discoveredHotels.set(key, { expiresAt: Date.now() + METADATA_TTL_MS, value: discovered });
+      destination = { key, name: query.trim() };
+    }
+  }
+  if (!destination) {
     const verified = catalogByQuery(query);
     if (verified) destination = { key: verified.key, name: verified.name };
   }
-  if (!destination) throw new Error(`Xotelo could not resolve “${query}”. Try a nearby city or landmark.`);
+  if (!destination) throw new Error(`No real hotel results could be resolved for “${query}”. Try a city, region or landmark.`);
   destinationCache.set(cacheKey, { expiresAt: Date.now() + METADATA_TTL_MS, value: destination });
   return destination;
 }
@@ -181,6 +275,12 @@ export async function listHotels(locationKey: string, limit = 8) {
   const cacheKey = `${locationKey}:${limit}`;
   const cached = hotelCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) return cached.value.map((hotel) => ({ ...hotel }));
+  const discovered = discoveredHotels.get(locationKey);
+  if (discovered && discovered.expiresAt > Date.now()) {
+    const hotels = discovered.value.slice(0, limit).map((hotel) => ({ ...hotel }));
+    hotelCache.set(cacheKey, { expiresAt: Date.now() + METADATA_TTL_MS, value: hotels });
+    return hotels;
+  }
   let hotels: HotelResult[] = [];
   try {
     const result = await request("/list", { location_key: locationKey, limit, offset: 0, sort: "best_value" });
