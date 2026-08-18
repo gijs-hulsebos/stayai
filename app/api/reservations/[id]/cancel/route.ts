@@ -1,7 +1,7 @@
 import { mapReservation } from "@/lib/data-mappers";
 import { jsonError, requireAuthenticatedClient } from "@/lib/supabase/server";
 
-export async function POST(request: Request, context: RouteContext<"/api/reservations/[id]/cancel">) {
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const { supabase } = await requireAuthenticatedClient(request);
